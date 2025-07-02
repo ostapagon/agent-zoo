@@ -1,0 +1,7 @@
+coordinator:
+  model: gpt-4
+  temperature: 0.7
+  task_routing:
+    sql: text2sql
+    query: text2sql
+    database: text2sql

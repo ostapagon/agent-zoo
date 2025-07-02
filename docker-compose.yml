@@ -1,0 +1,75 @@
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: text2sql
+      POSTGRES_PASSWORD: text2sql
+      POSTGRES_DB: text2sql_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U text2sql -d text2sql_db"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - app-network
+
+  # Backend API Service
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "8000:8000"
+      - "8888:8888"  # Jupyter Lab
+    environment:
+      DATABASE_URL: postgresql://text2sql:text2sql@db:5432/text2sql_db
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      # Read-write volumes for development (changes locally reflect in container)
+      - ./config:/app/config
+      - ./agents:/app/agents
+      - ./core:/app/core
+      - ./models:/app/models
+      - ./services:/app/services
+      - ./backend:/app/backend
+      - ./notebooks:/app/notebooks
+    command: ["python", "backend/main.py"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - app-network
+
+  # Frontend Web Application
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend/src:/app/src:ro
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge 
