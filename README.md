@@ -38,7 +38,7 @@ A modern multi-agent system for natural language processing and database interac
 1. Clone the repository:
 ```bash
 git clone <your-repo-url>
-cd agent-hub
+cd agent-zoo
 ```
 
 2. Start all services with Docker:
