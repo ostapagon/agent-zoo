@@ -42,7 +42,7 @@ docker-down:
 	docker-compose down
 
 
-# docker-run-jupyter: docker exec -it agent-chat-backend-1 jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root
+# docker-run-jupyter: docker exec -it agent-zoo-backend-1 jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root
 
 # Install dependencies for both services
 install: venv
