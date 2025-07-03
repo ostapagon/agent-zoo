@@ -23,15 +23,13 @@ class Config:
 
     def _override_from_env(self):
         """Override config values from environment variables"""
-        # Azure OpenAI settings
-        if os.getenv("AZURE_OPENAI_API_KEY"):
-            self.config.setdefault("azure_openai", {})["api_key"] = os.getenv("AZURE_OPENAI_API_KEY")
-        if os.getenv("AZURE_OPENAI_ENDPOINT"):
-            self.config.setdefault("azure_openai", {})["endpoint"] = os.getenv("AZURE_OPENAI_ENDPOINT")
-        if os.getenv("AZURE_OPENAI_API_VERSION"):
-            self.config.setdefault("azure_openai", {})["api_version"] = os.getenv("AZURE_OPENAI_API_VERSION")
-        if os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME"):
-            self.config.setdefault("azure_openai", {})["deployment_name"] = os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME")
+        # Google AI settings
+        if os.getenv("GOOGLE_AI_API_KEY"):
+            self.config.setdefault("google_ai", {})["api_key"] = os.getenv("GOOGLE_AI_API_KEY")
+        if os.getenv("GOOGLE_AI_MODEL"):
+            self.config.setdefault("google_ai", {})["model_name"] = os.getenv("GOOGLE_AI_MODEL")
+        if os.getenv("GOOGLE_AI_TEMPERATURE"):
+            self.config.setdefault("google_ai", {})["temperature"] = float(os.getenv("GOOGLE_AI_TEMPERATURE"))
 
         # Agent-specific settings
         for agent_name in self.config.get("agents", {}).keys():
@@ -47,25 +45,16 @@ class Config:
 
         # Logging settings
         if os.getenv("LOG_LEVEL"):
-            self.config.setdefault("logging", {})["level"] = os.getenv("LOG_LEVEL")
-        if os.getenv("LOG_FILE"):
-            self.config.setdefault("logging", {})["file"] = os.getenv("LOG_FILE")
+            self.config["log_level"] = os.getenv("LOG_LEVEL")
 
     def get(self, key: str, default: Any = None) -> Any:
-        """Get configuration value by key"""
-        keys = key.split(".")
-        value = self.config
-        for k in keys:
-            if isinstance(value, dict):
-                value = value.get(k, default)
-            else:
-                return default
-        return value
+        """Get a configuration value"""
+        return self.config.get(key, default)
 
-    def set(self, key: str, value: Any):
-        """Set configuration value by key"""
-        keys = key.split(".")
-        config = self.config
-        for k in keys[:-1]:
-            config = config.setdefault(k, {})
-        config[keys[-1]] = value 
+    def __getitem__(self, key: str) -> Any:
+        """Get a configuration value using bracket notation"""
+        return self.config[key]
+
+    def __contains__(self, key: str) -> bool:
+        """Check if a configuration key exists"""
+        return key in self.config 

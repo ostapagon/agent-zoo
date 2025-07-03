@@ -11,7 +11,7 @@ import json
 from langgraph.graph import StateGraph, END
 from langgraph.prebuilt import ToolNode
 from langchain_core.messages import BaseMessage, HumanMessage, AIMessage
-from langchain_openai import AzureChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.runnables import RunnablePassthrough
@@ -104,14 +104,12 @@ class OrchestratorAgent(BaseAgent):
         self.agents = {}
         self.status = AgentStatus.IDLE
         
-        azure_config = config.get("azure_openai")
-        self.llm = AzureChatOpenAI(
-            openai_api_version=azure_config.get("api_version", "2024-02-15-preview"),
-            azure_deployment=azure_config.get("deployment_name"),
-            azure_endpoint=azure_config.get("endpoint"),
-            api_key=azure_config.get("api_key"),
-            temperature=azure_config.get("temperature", 0.1),
-            model_name=azure_config.get("model_name", "gpt-4o-mini")
+        google_config = config.get("google_ai")
+        self.llm = ChatGoogleGenerativeAI(
+            model=google_config.get("model_name", "gemini-2.5-flash"),
+            google_api_key=google_config.get("api_key"),
+            temperature=google_config.get("temperature", 0.1),
+            convert_system_message_to_human=True,
         )
         
         self.graph = self._build_graph()

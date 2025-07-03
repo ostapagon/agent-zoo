@@ -31,7 +31,7 @@ A modern multi-agent system for natural language processing and database interac
 - Python 3.9+
 - Node.js 18+
 - npm (comes with Node.js)
-- OpenAI API key
+- Google AI API key
 
 ## Quick Start
 
@@ -148,7 +148,7 @@ pip install -r requirements.txt
 
 3. Create a `.env` file in the project root:
 ```
-OPENAI_API_KEY=your_openai_api_key_here
+GOOGLE_AI_API_KEY=your_google_ai_api_key_here
 DATABASE_URL=postgresql://text2sql:text2sql@localhost:5432/text2sql_db
 ```
 
@@ -190,7 +190,7 @@ The system uses YAML-based configuration for agents:
 
 ```yaml
 coordinator:
-  model: gpt-4
+  model: gemini-1.5-flash
   temperature: 0.7
   task_routing:
     sql: text2sql
@@ -209,7 +209,7 @@ coordinator:
 - **Frontend issues:**
   - Clear node_modules and run `make install` again
   - Check if port 5173 is available
-- **OpenAI errors:** Verify API key validity and quota
+- **Google AI errors:** Verify API key validity and quota
 
 ### Debugging
 - Check backend logs in terminal

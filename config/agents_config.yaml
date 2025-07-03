@@ -1,7 +1,12 @@
 coordinator:
-  model: gpt-4
+  model: gemini-2.5-flash
   temperature: 0.7
   task_routing:
     sql: text2sql
     query: text2sql
     database: text2sql
+
+google_ai:
+  model_name: gemini-2.5-flash
+  temperature: 0.5
+  api_key: ${GOOGLE_AI_API_KEY}
