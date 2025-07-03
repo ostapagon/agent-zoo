@@ -190,7 +190,7 @@ The system uses YAML-based configuration for agents:
 
 ```yaml
 coordinator:
-  model: gemini-1.5-flash
+  model: gemini-2.5-flash
   temperature: 0.7
   task_routing:
     sql: text2sql
