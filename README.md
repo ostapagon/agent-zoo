@@ -1,4 +1,4 @@
-# Agent Hub
+# Agent Zoo
 
 A modern multi-agent system for natural language processing and database interactions, featuring a Text2SQL chatbot with orchestrated agent coordination.
 
